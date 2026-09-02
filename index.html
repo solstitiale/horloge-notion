@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Horloge pastel (small)</title>
+  <title>Horloge Pastel</title>
 
+  <!-- Police arrondie -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&display=swap" rel="stylesheet">
@@ -14,52 +15,61 @@
       --pink: #ffb7c9;
       --peach:#ffc7a8;
 
-      /* Fond doux comme la capture */
+      /* Dégradé “fond” (plein écran dans l’embed) */
       --frame1: rgba(199,180,255,0.55);
       --frame2: rgba(255,209,218,0.70);
 
+      /* Carte */
       --cardBg: rgba(255, 236, 244, 0.32);
       --cardBorder: rgba(255,255,255,0.40);
       --shadow: rgba(180, 120, 160, 0.18);
     }
 
+    /* IMPORTANT: évite le fond blanc de l’iframe */
     html, body {
-  width: 100%;
-  height: 100%;
-  background: transparent !important;
-  margin: 0;
-}
-
-body{
-  display:grid;
-  place-items:center;
-  background: transparent !important;
-  font-family: "Baloo 2", ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-}
-
-    /* IMPORTANT: petit widget -> largeur “colonne Notion” */
-    .frame{
-      width: 260px;           /* ajuste à 220–320 selon ta colonne */
-      border-radius: 22px;
-      padding: 14px;
-      background: linear-gradient(180deg, var(--frame1), var(--frame2));
-      border: 1px solid rgba(255,255,255,0.26);
-      box-shadow: 0 14px 36px rgba(0,0,0,0.10);
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: transparent !important;
     }
 
+    body{
+      font-family: "Baloo 2", ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: transparent !important;
+    }
+
+    /* Le fond doit remplir TOUT l’embed, quelle que soit la taille */
+    .frame{
+      width: 100vw;
+      height: 100vh;
+      box-sizing: border-box;
+
+      display: grid;
+      place-items: center;
+
+      padding: 16px;
+      background: linear-gradient(180deg, var(--frame1), var(--frame2));
+    }
+
+    /* La carte reste “petit widget” */
     .card{
+      width: min(320px, 92vw);
       border-radius: 18px;
       padding: 12px 12px 10px;
+
       background: var(--cardBg);
       border: 1px solid var(--cardBorder);
+
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),
-                  0 10px 22px var(--shadow);
+
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        0 10px 22px var(--shadow);
     }
 
     .time{
-      font-size: 52px;        /* petit widget, mais “hero” */
+      font-size: 52px;
       line-height: 1;
       letter-spacing: -0.02em;
 
@@ -80,7 +90,8 @@ body{
       color: rgba(255,255,255,0.80);
       text-shadow: 0 2px 10px rgba(150,90,150,0.10);
       text-transform: capitalize;
-      white-space: nowrap;    /* garde sur une ligne */
+
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -102,8 +113,6 @@ body{
       hour12: false
     });
 
-    // Date courte et clean pour petit widget
-    // ex: "mercredi 2 septembre"
     const fmtDate = new Intl.DateTimeFormat("fr-FR", {
       weekday: "long",
       day: "numeric",
@@ -115,6 +124,7 @@ body{
       document.getElementById("time").textContent = fmtTime.format(now);
       document.getElementById("date").textContent = fmtDate.format(now);
     }
+
     tick();
     setInterval(tick, 1000);
   </script>
